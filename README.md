@@ -48,7 +48,7 @@ A modern, offline-first personal budgeting application built with React, TypeScr
 ┌──────────────────────────────────────────────────────────────┐
 │                     BACKEND (Optional)                        │
 │  ┌──────────────────────────────────────────────────────┐   │
-│  │              Lovable Cloud (Supabase)                 │   │
+│  │                         │   │
 │  │  ┌─────────────┐  ┌─────────────┐  ┌────────────┐   │   │
 │  │  │   Auth      │  │  Database   │  │   Edge     │   │   │
 │  │  │   (Email)   │  │  PostgreSQL │  │  Functions │   │   │
