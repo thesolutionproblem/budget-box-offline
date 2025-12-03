@@ -1,73 +1,186 @@
-# Welcome to your Lovable project
+# 📦 BudgetBox - Offline-First Personal Budgeting
 
-## Project info
+A modern, offline-first personal budgeting application built with React, TypeScript, and Zustand. Track your income and expenses with auto-save functionality that works 100% offline.
 
-**URL**: https://lovable.dev/projects/885775d4-c765-432b-b795-03791f7fa45f
+## ✨ Features
 
-## How can I edit this code?
+- **100% Offline Support**: Works without internet connection
+- **Auto-Save**: Every keystroke saves instantly to IndexedDB
+- **Sync Status Indicators**: Visual feedback for Local Only, Sync Pending, Synced states
+- **Smart Analytics**: Burn rate, savings potential, and month-end predictions
+- **Rule-Based Insights**: Intelligent warnings based on spending patterns
+- **Beautiful Charts**: Pie chart breakdown of spending categories
+- **Responsive Design**: Works on desktop and mobile
 
-There are several ways of editing your application.
+## 🏗️ Architecture
 
-**Use Lovable**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        FRONTEND                              │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │                    React + Vite                      │    │
+│  │  ┌───────────┐  ┌───────────┐  ┌───────────────┐   │    │
+│  │  │  Budget   │  │ Dashboard │  │   Analytics   │   │    │
+│  │  │   Form    │  │   Page    │  │   Components  │   │    │
+│  │  └─────┬─────┘  └─────┬─────┘  └───────┬───────┘   │    │
+│  │        │              │                │            │    │
+│  │        └──────────────┼────────────────┘            │    │
+│  │                       │                              │    │
+│  │               ┌───────▼───────┐                     │    │
+│  │               │ Zustand Store │                     │    │
+│  │               │ with Persist  │                     │    │
+│  │               └───────┬───────┘                     │    │
+│  │                       │                              │    │
+│  │               ┌───────▼───────┐                     │    │
+│  │               │   localForage │                     │    │
+│  │               │   (IndexedDB) │                     │    │
+│  │               └───────┬───────┘                     │    │
+│  └───────────────────────┼──────────────────────────────┘    │
+│                          │                                    │
+│            ┌─────────────▼─────────────┐                     │
+│            │    Network Status Hook    │                     │
+│            │  (Online/Offline Detection)│                    │
+│            └─────────────┬─────────────┘                     │
+│                          │                                    │
+└──────────────────────────┼────────────────────────────────────┘
+                           │
+                           ▼ (when online)
+┌──────────────────────────────────────────────────────────────┐
+│                     BACKEND (Optional)                        │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │              Lovable Cloud (Supabase)                 │   │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌────────────┐   │   │
+│  │  │   Auth      │  │  Database   │  │   Edge     │   │   │
+│  │  │   (Email)   │  │  PostgreSQL │  │  Functions │   │   │
+│  │  └─────────────┘  └─────────────┘  └────────────┘   │   │
+│  └──────────────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────┘
+```
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/885775d4-c765-432b-b795-03791f7fa45f) and start prompting.
+## 🔄 How Offline Mode Works
 
-Changes made via Lovable will be committed automatically to this repo.
+1. **Local Storage**: All budget data is stored in IndexedDB using localForage
+2. **Auto-Save**: Zustand persist middleware saves on every state change
+3. **Network Detection**: useNetworkStatus hook monitors online/offline status
+4. **Sync Queue**: When offline, changes are marked as "pending"
+5. **Auto-Sync**: When connection returns, data automatically syncs to backend
 
-**Use your preferred IDE**
+### Data Flow
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```
+User Input → Zustand Store → localForage (IndexedDB) → Sync Queue → Backend
+                  ↓
+            UI Updates Instantly
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 📁 Project Structure
 
-Follow these steps:
+```
+src/
+├── components/
+│   ├── AnalyticsCards.tsx   # Dashboard metric cards
+│   ├── BudgetForm.tsx       # Main budget entry form
+│   ├── BudgetInput.tsx      # Reusable input component
+│   ├── CategoryChart.tsx    # Pie chart visualization
+│   ├── Header.tsx           # App header with branding
+│   ├── Navigation.tsx       # Bottom/inline navigation
+│   ├── NetworkStatus.tsx    # Online/offline indicator
+│   └── WarningsPanel.tsx    # Smart insights display
+├── hooks/
+│   └── useNetworkStatus.ts  # Network detection hook
+├── pages/
+│   ├── Index.tsx            # Budget form page
+│   └── Dashboard.tsx        # Analytics dashboard
+├── stores/
+│   └── budgetStore.ts       # Zustand store with persistence
+├── types/
+│   └── budget.ts            # TypeScript interfaces
+└── index.css                # Design system tokens
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🎨 Design System
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+The app uses a custom design system with CSS variables:
 
-# Step 3: Install the necessary dependencies.
-npm i
+- **Primary**: Deep Navy (#1a2744) - Trust & Stability
+- **Accent**: Emerald Green - Money & Growth
+- **Warning**: Warm Amber - Alerts
+- **Typography**: DM Sans (body), Space Grotesk (display)
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+
+# Navigate to project
+cd budgetbox
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Demo Credentials
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+If backend authentication is enabled:
+- Email: `hire-me@anshumat.org`
+- Password: `HireMe@2025!`
 
-**Use GitHub Codespaces**
+## 📊 Analytics Features
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Metrics Calculated
 
-## What technologies are used for this project?
+| Metric | Formula |
+|--------|---------|
+| Burn Rate | Total Expenses / Income |
+| Savings Potential | Income - Total Expenses |
+| Month-End Prediction | Projected remaining balance |
+| Category % | Category Expense / Income × 100 |
 
-This project is built with:
+### Smart Warnings
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Food > 40%**: Meal planning suggestion
+- **Subscriptions > 30%**: Review unused services
+- **Expenses > Income**: Urgent budget review
+- **Burn Rate > 90%**: Emergency fund warning
 
-## How can I deploy this project?
+## 🛠️ Tech Stack
 
-Simply open [Lovable](https://lovable.dev/projects/885775d4-c765-432b-b795-03791f7fa45f) and click on Share -> Publish.
+- **Frontend**: React 18, TypeScript, Vite
+- **State**: Zustand with persist middleware
+- **Storage**: localForage (IndexedDB wrapper)
+- **Styling**: Tailwind CSS
+- **Charts**: Recharts
+- **UI Components**: shadcn/ui
 
-## Can I connect a custom domain to my Lovable project?
+## 📱 Responsive Design
 
-Yes, you can!
+- Mobile-first approach
+- Bottom navigation on mobile
+- Inline navigation on desktop
+- Adaptive card layouts
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🔐 Security
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- All data stored locally is encrypted by browser
+- No sensitive data logged to console
+- HTTPS required for sync
+- Input validation on all fields
+
+## 📄 License
+
+MIT License - feel free to use for personal or commercial projects.
+
+---
+
+Built with ❤️ using Lovable
