@@ -183,4 +183,4 @@ MIT License - feel free to use for personal or commercial projects.
 
 ---
 
-Built with ❤️ using Lovable
+
